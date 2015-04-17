@@ -2,7 +2,7 @@
    :target: https://travis-ci.org/lneisenman/burst_sync
 
 .. image:: https://coveralls.io/repos/lneisenman/burst_sync/badge.svg?branch=master
-   :target: https://coveralls.io/r/lneisenman/burst_sync?branch=master
+  :target: https://coveralls.io/r/lneisenman/burst_sync?branch=master
 
 .. image:: https://ci.appveyor.com/api/projects/status/3os4d1tmukcrlb38/branch/master?svg=true
    :target: https://ci.appveyor.com/api/projects/status/3os4d1tmukcrlb38
