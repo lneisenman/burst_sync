@@ -23,6 +23,11 @@ import setuptools
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
+from distutils.extension import Extension
+from Cython.Build import cythonize
+
+import numpy
+
 # For Python 2/3 compatibility, pity we can't use six.moves here
 try:  # try Python 3 imports first
     import configparser
@@ -497,6 +502,24 @@ def setup_package():
         'test': {'test_suite': ('setup.py', 'tests'),
                  'cov': ('setup.py', root_pkg)}}
 
+    spike_source_files = ["burst_sync/spike/cython_spike/cython_spike.pyx",
+                          "burst_sync/spike/cython_spike/find_corner_spikes.c"]
+    sttc_source_files = ["burst_sync/sttc/cython_sttc/cython_sttc.pyx",
+                         "burst_sync/sttc/cython_sttc/spike_time_tiling_coefficient.c"]
+    include_dirs = [numpy.get_include()]
+    extensions = [Extension("burst_sync.spike.cython_spike",
+                            sources=spike_source_files,
+                            include_dirs=include_dirs),
+                  Extension("burst_sync.sttc.cython_sttc",
+                            sources=sttc_source_files,
+                            include_dirs=include_dirs)]
+    spike_other_files = ["burst_sync/spike/cython_spike/cython_spike.pyx",
+                         "burst_sync/spike/cython_spike/find_corner_spikes.c",
+                         "burst_sync/spike/cython_spike/find_corner_spikes.h"]
+    sttc_other_files = ["burst_sync/sttc/cython_sttc/cython_sttc.pyx",
+                        "burst_sync/sttc/cython_sttc/spike_time_tiling_coefficient.c",
+                        "burst_sync/sttc/cython_sttc/spike_time_tiling_coefficient.h"]
+
     setup(name=package,
           version=version,
           url=metadata['url'],
@@ -510,11 +533,14 @@ def setup_package():
           packages=setuptools.find_packages(exclude=['tests', 'tests.*']),
           namespace_packages=namespace,
           install_requires=install_reqs,
-          setup_requires=['six'],
+          setup_requires=['six', 'Cython'],
           cmdclass=cmdclass,
+          ext_modules=cythonize(extensions),
           tests_require=['pytest-cov', 'pytest'],
           package_data={package: metadata['package_data']},
-          data_files=[('.', metadata['data_files'])],
+          data_files=[('.', metadata['data_files']),
+                      ('burst_sync.spike.cython_spike', spike_other_files),
+                      ('burst_sync.sttc.cython_sttc', sttc_other_files)],
           command_options=command_options,
           entry_points={'console_scripts': console_scripts},
           zip_safe=False)  # do not zip egg file after setup.py install
