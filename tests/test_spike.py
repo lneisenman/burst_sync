@@ -51,7 +51,7 @@ def test_multivariate():
     # spike_times is an array where each rows contains the spike times of a neuron
     spike_times = np.zeros((num_trains, num_spikes))
     # The first spikes are randomly spread in the first half of the simulation time
-    spike_times[:,range(num_spikes//2)] = tf/2.0 * np.random.random((num_trains, num_spikes/2))
+    spike_times[:,range(num_spikes//2)] = tf/2.0 * np.random.random((num_trains, num_spikes//2))
     # We now append the times for the events with increasing jitter
     for i in range(1,num_events+1):
         tb = tf/2.0 * i / num_events 
