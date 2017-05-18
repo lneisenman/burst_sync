@@ -4,8 +4,9 @@
 .. image:: https://coveralls.io/repos/lneisenman/burst_sync/badge.svg?branch=master
    :target: https://coveralls.io/r/lneisenman/burst_sync?branch=master
 
-.. image:: https://ci.appveyor.com/api/projects/status/3os4d1tmukcrlb38/branch/master?svg=true
-   :target: https://ci.appveyor.com/api/projects/status/3os4d1tmukcrlb38
+.. image:: https://ci.appveyor.com/api/projects/status/roi20soq98p8df4s/branch/master?svg=true
+   :target: https://ci.appveyor.com/project/lneisenman22439/burst-sync/branch/master
+
 
 ==========
 burst_sync
@@ -22,7 +23,7 @@ License.txt file.
 The Python code in this package requires Numpy, Scipy and Pandas to run. Cython
 is required to compile from source.
 
-The Python code has been tested for the 64 bit versions of Python 2.7 and 3.4
+The Python code has been tested for the 64 bit versions of Python 2.7 and 3.4 - 3.6
 in both Windows (`AppVeyor <http://www.appveyor.com/>`_) and
 Linux (`Travis <https://travis-ci.org/>`_)
 
@@ -38,7 +39,7 @@ complete scientific distrubution such as `Anaconda <http://continuum.io/download
 `Enthought Canopy <https://www.enthought.com/products/canopy/>`_
 or `WinPython <http://winpython.github.io/>`_.
 
-Wheels for the 64 bit versions of Python 2.7 and Python 3.4 were compiled
+Wheels for the 64 bit versions of Python 2.7 and Python 3.4 - 3.6 were compiled
 using Appveyor. These wheels can be installed using a current version of pip::
 
    pip install -U pip
