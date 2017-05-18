@@ -70,6 +70,7 @@ install:
 build_script:
   # Build the compiled extension
   - "build.cmd python setup.py build"
+  - "pip install -e ."
 
 test_script:
   # Run the project tests
