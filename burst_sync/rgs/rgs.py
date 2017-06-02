@@ -491,13 +491,15 @@ def bp_summary(data, thresh0=stats.norm.ppf(0.05),
                 bp_p = temp[temp['adjP'] <= alpha]
 
         tzd = pd.Series(np.cumsum(np.append(0, zd[:-1])))   # spike time
-
         # other summaries
-        bp_b.loc[:, 'start'] = tzd[bp_b['id']]
-        bp_b.loc[:, 'end'] = tzd[bp_b['id']] + bp_b['interval']
-        bp_p.loc[:, 'start'] = tzd[bp_p['id']]
-        bp_p.loc[:, 'end'] = tzd[bp_p['id']] + bp_p['interval']
-
+        temp = tzd[bp_b['id']]
+        bp_b.loc[:, 'start'] = temp
+        temp = tzd[bp_b.loc[:, 'id']] + bp_b.loc[:, 'interval']
+        bp_b.loc[:, 'end'] = temp
+        temp = tzd.loc[bp_p.loc[:, 'id']]
+        bp_p.loc[:, 'start'] = temp
+        temp = tzd[bp_p.loc[:, 'id']] + bp_p.loc[:, 'interval']
+        bp_p.loc[:, 'end'] = temp
         if (bp_b.shape[0] > 0):
             del bp_b['P']
             del bp_b['S']
@@ -523,7 +525,8 @@ def bp_summary(data, thresh0=stats.norm.ppf(0.05),
 
 if __name__ == '__main__':
     # Example run of RGS functions
-    filenames = ['testdata1.csv', 'testdata2.csv', 'testdata3.csv']
+    filenames = ['../../tests/testdata1.csv', '../../tests/testdata2.csv',
+                 '../../tests/testdata3.csv']
 #    filenames = ['testdata3.csv']
     data1 = list()
     for fn in filenames:
@@ -531,5 +534,5 @@ if __name__ == '__main__':
         data1.append(temp)
 
     bursts, pauses = bp_summary(data1, p_thresh=0.001)
-    print(bursts)
-    print(pauses)
+#    print(bursts)
+#    print(pauses)

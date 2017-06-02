@@ -15,15 +15,10 @@ import numpy as np
 from burst_sync import rgs
 
 
-def df_equal(df1, df2):
-    """
-    compare two data frames column by column
-    """
+def assert_df_equal(df1, df2):
+    ''' compare two data frames column by column '''
     for col in df1:
-        if not np.allclose(df1[col], df2[col]):
-            return False
-
-    return True
+        np.testing.assert_allclose(df1[col], df2[col], rtol=0, atol=1e-6)
 
 
 def test_rgs():
@@ -47,10 +42,14 @@ def test_rgs():
         if i < 2:   # can't compare empty dataframes using equals
             assert r.empty
         else:
-            assert df_equal(r, b)
+            assert_df_equal(r, b)
 
     for i, (r, p) in enumerate(zip(results[1], pauses)):
         if i == 0:
             assert r.empty
         else:
-            assert df_equal(r, p)
+            assert_df_equal(r, p)
+
+
+if __name__ == '__main__':
+    test_rgs()
