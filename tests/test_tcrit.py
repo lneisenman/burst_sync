@@ -83,5 +83,7 @@ def test_tcrit_network_bursts(read_spikes, read_bursts, read_network_bursts):
     np.testing.assert_allclose(read_network_bursts['end'], nb.end)
     np.testing.assert_allclose(read_network_bursts['num_spikes'],
                                nb.num_spikes)
-    np.testing.assert_allclose(read_network_bursts['end'], nb.end)
-    np.testing.assert_allclose(read_network_bursts['end'], nb.end)
+    np.testing.assert_allclose(read_network_bursts['num_channels'],
+                               nb.num_channels)
+    np.testing.assert_allclose(read_network_bursts['total_spikes'],
+                               nb.total_spikes)

@@ -68,7 +68,7 @@ def count_spikes_in_network_burst(start, end, spikes):
     for channel in spikes:
         test = np.logical_and(spikes[channel] >= start,
                               spikes[channel] <= end)
-        index = np.where(test is True)
+        index = np.where(test == True)  # test is True doesn't work
         num_spikes += len(index[0])
 
     return num_spikes
@@ -94,7 +94,6 @@ def calculate_network_bursts(spikes, bursts):
     order = np.argsort(burst_start)
     burst_num_spikes = burst_num_spikes[order].copy()
     burst_end = burst_end[order].copy()
-    burst_num_spikes = burst_num_spikes[order].copy()
     burst_channel = burst_channel[order].copy()
     burst_start = np.sort(burst_start)
     i = 0
