@@ -7,6 +7,7 @@ from __future__ import (print_function, division,
                         unicode_literals, absolute_import)
 
 import numpy as np
+import scipy.stats as ss
 
 
 class Burst():
@@ -16,15 +17,21 @@ class Burst():
 
 def calculate_isi(spikes):
     isi = dict()
+    times = np.zeros(0)
     for key in spikes:
         isi[key] = np.diff(spikes[key])
+        times = np.append(times, isi[key])
 
-    return isi
+    return isi, np.average(times), np.std(times), ss.sem(times)
 
 
 def calculate_bursts(spikes, tcrit=0.15):
+    detected = False
     bursts = dict()
-    intervals = calculate_isi(spikes)
+    durations = np.zeros(0)
+    num_bursts = 0
+    total_spikes = np.zeros(0)
+    intervals = calculate_isi(spikes)[0]
     for label, spike_times in spikes.items():
         isi = intervals[label]
         num = index = 0
@@ -46,21 +53,45 @@ def calculate_bursts(spikes, tcrit=0.15):
             index += 1
 
         if len(start) > 0:
+            detected = True
             burst = Burst()
             burst.start = start
             burst.end = end
             burst.num_spikes = num_spikes
             bursts[label] = burst
+            num_bursts += len(start)
+            durations = np.append(durations, end - start)
+            total_spikes = np.append(total_spikes, num_spikes)
 
-    return bursts
+    if detected:
+        duration_stats = (np.average(durations), np.std(durations),
+                          ss.sem(durations))
+        num_spike_stats = (np.average(total_spikes), np.std(total_spikes),
+                           ss.sem(total_spikes))
+        rates = total_spikes / durations
+        rates_stats = (np.average(rates), np.std(rates), ss.sem(rates))
+        return bursts, num_bursts, duration_stats, num_spike_stats, rates_stats
+    else:
+        return None
+
+
+def calculate_burst_durations(bursts):
+    durations = np.zeros(0)
+    for key in bursts:
+        durs = bursts[key].end - bursts[key].start
+        durations = np.append(durations, durs)
+
+    return durations
 
 
 def calculate_ibi(bursts):
     ibi = dict()
+    times = np.zeros(0)
     for key in bursts:
         ibi[key] = bursts[key].start[1:] - bursts[key].end[:-1]
+        times = np.append(times, ibi[key])
 
-    return ibi
+    return ibi, np.average(times), np.std(times), ss.sem(times)
 
 
 def count_spikes_in_network_burst(start, end, spikes):

@@ -61,14 +61,14 @@ def read_network_bursts():
 
 
 def test_calculate_ibi(read_bursts, read_ibi):
-    ibi = tcrit.calculate_ibi(read_bursts)
+    ibi = tcrit.calculate_ibi(read_bursts)[0]
     for key in ibi:
         np.testing.assert_allclose(ibi[key], read_ibi[key])
 
 
 def test_tcrit_bursts(read_spikes, read_bursts):
     ''' Use Igor sample data to test python tcrit burst functions '''
-    bursts = tcrit.calculate_bursts(read_spikes)
+    bursts = tcrit.calculate_bursts(read_spikes)[0]
     for key in bursts:
         np.testing.assert_allclose(bursts[key].start, read_bursts[key].start)
         np.testing.assert_allclose(bursts[key].end, read_bursts[key].end)
