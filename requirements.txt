@@ -2,6 +2,9 @@
 # numpy
 # scipy>=0.9
 
+matplotlib >= 2.0.2
 numpy >= 1.9
-scipy >= 0.15
 pandas >= 0.16
+scipy >= 0.15
+
+-e git+https://github.com/lneisenman/meanet.git
