@@ -103,4 +103,7 @@ def summary_plot(data, labels):
             color='k', capsize=10)
     plt.ylabel('Spikes per Burst')
 
+    plt.suptitle('ISI_N Burst Parameters')
+    plt.tight_layout()
+
     return plot1

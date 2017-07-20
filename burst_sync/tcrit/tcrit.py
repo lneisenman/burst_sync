@@ -160,13 +160,16 @@ def calculate_network_bursts(spikes, bursts):
         else:
             i += 1
 
-    network_burst = Burst()
-    network_burst.start = nb_start
-    network_burst.end = nb_end
-    network_burst.num_spikes = nb_num_spikes
-    network_burst.num_channels = nb_num_channels
-    network_burst.total_spikes = nb_total_spikes
-    return network_burst
+    if len(nb_start) > 0:
+        network_burst = Burst()
+        network_burst.start = nb_start
+        network_burst.end = nb_end
+        network_burst.num_spikes = nb_num_spikes
+        network_burst.num_channels = nb_num_channels
+        network_burst.total_spikes = nb_total_spikes
+        return network_burst
+    else:
+        return None
 
 
 def calculate_inbi(nb):

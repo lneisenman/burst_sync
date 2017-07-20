@@ -12,6 +12,26 @@ from burst_sync import tcrit
 import meanet
 
 
+def no_bursts(summary):
+    summary.loc['num_bursts', :] = [np.NaN, np.NaN, np.NaN, 0]
+    summary.loc['burst_dur', :] = [np.NaN, np.NaN, np.NaN, np.NaN]
+    summary.loc['spikes_per_burst', :] = [np.NaN, np.NaN, np.NaN, np.NaN]
+    summary.loc['burst_spike_rate', :] = [np.NaN, np.NaN, np.NaN, np.NaN]
+    summary.loc['ibi', :] = [np.NaN, np.NaN, np.NaN, np.NaN]
+    summary = no_network_bursts(summary)
+    return summary
+
+
+def no_network_bursts(summary):
+    summary.loc['num_nb', :] = [np.NaN, np.NaN, np.NaN, 0]
+    summary.loc['nb_dur', :] = [np.NaN, np.NaN, np.NaN, np.NaN]
+    summary.loc['nb_num_spikes', :] = [np.NaN, np.NaN, np.NaN, np.NaN]
+    summary.loc['nb_total_spikes', :] = [np.NaN, np.NaN, np.NaN, np.NaN]
+    summary.loc['nb_contacts', :] = [np.NaN, np.NaN, np.NaN, np.NaN]
+    summary.loc['inbi', :] = [np.NaN, np.NaN, np.NaN, np.NaN]
+    return summary
+
+
 def igor_analysis(mea):
     ''' perform the MEA data analysis originally coded in Igor '''
     analysis = dict()
@@ -25,57 +45,51 @@ def igor_analysis(mea):
     analysis['B'] = bs.b_statistic(mea)
 
     analysis['isi'], ave, std, sem = tcrit.calculate_isi(mea)
-    data = [(ave, std, sem, np.NaN)]
-    isi = pd.DataFrame(index=['isi'], data=data, columns=columns)
-    analysis['summary'] = analysis['summary'].append(isi)
+    analysis['summary'].loc['isi', :] = [ave, std, sem, np.NaN]
 
     bursts = tcrit.calculate_bursts(mea)
-    analysis['bursts'], num_bursts, dur_stats, spikes_stats, rates_stats = bursts
-    data = [(np.NaN, np.NaN, np.NaN, num_bursts)]
-    num = pd.DataFrame(index=['num_bursts'], data=data, columns=columns)
-    data = [np.append(dur_stats, np.NaN)]
-    dur = pd.DataFrame(index=['burst_dur'], data=data, columns=columns)
-    data = [np.append(spikes_stats, np.NaN)]
-    spikes = pd.DataFrame(index=['spikes_per_burst'], data=data,
-                          columns=columns)
-    data = [np.append(rates_stats, np.NaN)]
-    rates = pd.DataFrame(index=['burst_spike_rate'], data=data,
-                         columns=columns)
-    data = [num, dur, spikes, rates]
-    analysis['summary'] = analysis['summary'].append(data)
+    if bursts is not None:
+        analysis['bursts'], num_bursts, dur_stats, spikes_stats, rates_stats = bursts
+        analysis['summary'].loc['num_bursts', :] = [np.NaN, np.NaN, np.NaN, num_bursts]
+        analysis['summary'].loc['burst_dur', :] = np.append(dur_stats, np.NaN)
+        analysis['summary'].loc['spikes_per_burst', :] = np.append(spikes_stats, np.NaN)
+        analysis['summary'].loc['burst_spike_rate', :] = np.append(rates_stats, np.NaN)
 
-    analysis['ibi'], ave, std, sem = tcrit.calculate_ibi(analysis['bursts'])
-    data = [(ave, std, sem, np.NaN)]
-    ibi = pd.DataFrame(index=['ibi'], data=data, columns=columns)
-    analysis['summary'] = analysis['summary'].append(ibi)
+        analysis['ibi'], ave, std, sem = tcrit.calculate_ibi(analysis['bursts'])
+        analysis['summary'].loc['ibi', :] = [ave, std, sem, np.NaN]
 
-    analysis['nb'] = tcrit.calculate_network_bursts(mea, analysis['bursts'])
-    data = [(np.NaN, np.NaN, np.NaN, len(analysis['nb'].start))]
-    num = pd.DataFrame(index=['num_nb'], data=data, columns=columns)
-    times = analysis['nb'].end - analysis['nb'].start
-    data = [(np.average(times), np.std(times), ss.sem(times), np.NaN)]
-    dur = pd.DataFrame(index=['nb_dur'], data=data, columns=columns)
-    data = [(np.average(analysis['nb'].num_spikes),
-             np.std(analysis['nb'].num_spikes),
-             ss.sem(analysis['nb'].num_spikes), np.NaN)]
-    spikes = pd.DataFrame(index=['nb_num_spikes'], data=data, columns=columns)
-    data = [(np.average(analysis['nb'].total_spikes),
-             np.std(analysis['nb'].total_spikes),
-             ss.sem(analysis['nb'].total_spikes), np.NaN)]
-    total = pd.DataFrame(index=['nb_total_spikes'], data=data, columns=columns)
-    data = [(np.average(analysis['nb'].num_channels),
-             np.std(analysis['nb'].num_channels),
-             ss.sem(analysis['nb'].num_channels), np.NaN)]
-    channels = pd.DataFrame(index=['nb_contacts'], data=data,
-                            columns=columns)
-    data = [num, dur, spikes, total, channels]
-    analysis['summary'] = analysis['summary'].append(data)
+        analysis['nb'] = tcrit.calculate_network_bursts(mea, analysis['bursts'])
+        if analysis['nb'] is not None:
+            analysis['summary'].loc['num_nb', :] = [np.NaN, np.NaN, np.NaN,
+                                                    len(analysis['nb'].start)]
+            times = analysis['nb'].end - analysis['nb'].start
+            analysis['summary'].loc['nb_dur', :] = [np.average(times),
+                                                    np.std(times), 
+                                                    ss.sem(times), np.NaN]
+            analysis['summary'].loc['nb_num_spikes', :] = [np.average(analysis['nb'].num_spikes),
+                                                           np.std(analysis['nb'].num_spikes),
+                                                           ss.sem(analysis['nb'].num_spikes),
+                                                           np.NaN]
+            analysis['summary'].loc['nb_total_spikes', :] = [np.average(analysis['nb'].total_spikes),
+                                                             np.std(analysis['nb'].total_spikes),
+                                                             ss.sem(analysis['nb'].total_spikes),
+                                                             np.NaN]
+            analysis['summary'].loc['nb_contacts', :] = [np.average(analysis['nb'].num_channels),
+                                                         np.std(analysis['nb'].num_channels),
+                                                         ss.sem(analysis['nb'].num_channels),
+                                                         np.NaN]
 
-    analysis['inbi'] = tcrit.calculate_inbi(analysis['nb'])
-    data = [(np.average(analysis['inbi']), np.std(analysis['inbi']),
-             ss.sem(analysis['inbi']), np.NaN)]
-    inbi = pd.DataFrame(index=['inbi'], data=data, columns=columns)
-    analysis['summary'] = analysis['summary'].append(inbi)
+            analysis['inbi'] = tcrit.calculate_inbi(analysis['nb'])
+            analysis['summary'].loc['inbi', :] = [np.average(analysis['inbi']),
+                                                  np.std(analysis['inbi']),
+                                                  ss.sem(analysis['inbi']),
+                                                  np.NaN]
+
+        else:
+            analysis['summary'] = no_network_bursts(analysis['summary'])
+
+    else:
+        analysis['summary'] = no_bursts(analysis['summary'])
 
     return analysis
 
@@ -242,6 +256,7 @@ def igor_summary_plots(data, labels):
             capsize=10)
     plt.ylabel('Inter-burst Interval (s)')
 
+    plt.suptitle('Tcrit Burst Parameters')
     plt.tight_layout()
 
     plot2 = plt.figure(figsize=(10, 7))
@@ -269,6 +284,7 @@ def igor_summary_plots(data, labels):
             capsize=10)
     plt.ylabel('Inter Network Burst Interval (s)')
 
+    plt.suptitle('Tcrit Network Burst Parameters')
     plt.tight_layout()
 
     return plot1, plot2
