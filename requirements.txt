@@ -7,4 +7,4 @@ numpy >= 1.9
 pandas >= 0.16
 scipy >= 0.15
 
-https://github.com/lneisenman/meanet/archive/master.zip
+git+https://github.com/lneisenman/meanet#egg=meanet
