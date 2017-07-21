@@ -11,15 +11,15 @@ from Cython.Build import cythonize
 import numpy
 
 
-spike_source_files = ["burst_sync/spike/cython_spike/cython_spike.pyx",
-                      "burst_sync/spike/cython_spike/find_corner_spikes.c"]
-sttc_source_files = ["burst_sync/sttc/cython_sttc/cython_sttc.pyx",
-                     "burst_sync/sttc/cython_sttc/spike_time_tiling_coefficient.c"]
+spike_source_files = ['burst_sync/spike/cython_spike/cython_spike.pyx',
+                      'burst_sync/spike/cython_spike/find_corner_spikes.c']
+sttc_source_files = ['burst_sync/sttc/cython_sttc/cython_sttc.pyx',
+                     'burst_sync/sttc/cython_sttc/spike_time_tiling_coefficient.c']
 include_dirs = [numpy.get_include()]
-extensions = [Extension("burst_sync.spike.cython_spike",
+extensions = [Extension('cython_spike',
                         sources=spike_source_files,
                         include_dirs=include_dirs),
-              Extension("burst_sync.sttc.cython_sttc",
+              Extension('cython_sttc',
                         sources=sttc_source_files,
                         include_dirs=include_dirs)]
 
@@ -34,7 +34,7 @@ requirements = ['cython', 'numpy']
 
 setup(
     name='burst_sync',
-    version='burst_sync',
+    version='0.1.1.dev0',
     description="burst_sync",
     long_description=readme + '\n\n' + history,
     author="Larry Eisenman",
