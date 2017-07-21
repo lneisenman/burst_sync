@@ -8,7 +8,7 @@ import pandas as pd
 import scipy.stats as ss
 
 import burst_sync as bs
-from burst_sync import tcrit
+from . import tcrit
 import meanet
 
 
