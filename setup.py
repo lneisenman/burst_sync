@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup
 
@@ -16,10 +16,10 @@ spike_source_files = ['burst_sync/spike/cython_spike/cython_spike.pyx',
 sttc_source_files = ['burst_sync/sttc/cython_sttc/cython_sttc.pyx',
                      'burst_sync/sttc/cython_sttc/spike_time_tiling_coefficient.c']
 include_dirs = [numpy.get_include()]
-extensions = [Extension('cython_spike',
+extensions = [Extension('burst_sync.spike.cython_spike',
                         sources=spike_source_files,
                         include_dirs=include_dirs),
-              Extension('cython_sttc',
+              Extension('burst_sync.sttc.cython_sttc',
                         sources=sttc_source_files,
                         include_dirs=include_dirs)]
 
@@ -40,9 +40,7 @@ setup(
     author="Larry Eisenman",
     author_email='leisenman@wustl.edu',
     url='https://github.com/lneisenman/burst_sync',
-    packages=[
-        'burst_sync',
-    ],
+    packages=find_packages(exclude=['contrib', 'docs', 'tests','tests.*']),
     package_dir={'burst_sync':
                  'burst_sync'},
     package_data={'': ['*.pyx', '*.pxd', '*.h', '*.txt', '*.dat', '*.csv']},
