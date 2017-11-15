@@ -34,7 +34,7 @@ requirements = ['cython', 'numpy']
 
 setup(
     name='burst_sync',
-    version='0.1.1.dev0',
+    version='0.2.0.dev0',
     description="burst_sync",
     long_description=readme + '\n\n' + history,
     author="Larry Eisenman",
