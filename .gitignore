@@ -12,6 +12,10 @@ __pycache__/*
 .*.swp
 *.whl
 
+# Cython generated C files
+burst_sync/spike/cython_spike/cython_spike.c
+burst_sync/sttc/cython_sttc/cython_sttc.c
+
 # Project files
 .ropeproject
 .project
