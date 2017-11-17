@@ -2,11 +2,7 @@
 # numpy
 # scipy>=0.9
 
-h5py
 matplotlib >= 2.0.2
 numpy >= 1.9
 pandas >= 0.16
 scipy >= 0.15
-
-git+https://github.com/lneisenman/meanet#egg=meanet
-git+https://github.com/lneisenman/h5shelve#egg=h5shelve

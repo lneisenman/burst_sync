@@ -9,7 +9,6 @@ import scipy.stats as ss
 
 import burst_sync as bs
 from . import tcrit
-import meanet
 
 
 def no_bursts(summary):
