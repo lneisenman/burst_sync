@@ -12,7 +12,9 @@
 burst_sync
 ==========
 
-This is the source code for::
+Version 2.0 is an updated version for Python 3.10 with prior Igor code re-implemented in Python.
+
+Version 1.1 is the source code for::
 
    Eisenman et al. Quantification of bursting and synchrony in cultured hippocampal neurons. J Neurophysiol submitted.
 

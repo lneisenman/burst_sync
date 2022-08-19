@@ -479,7 +479,7 @@ def setup_package():
         del cmdclass['build']
 
     # Some helper variables
-    version = get_versions()["version"]
+    version = '2.0.0.Dev0'  # get_versions()["version"]
     docs_path = os.path.join(__location__, "docs")
     docs_build_path = os.path.join(docs_path, "_build")
     install_reqs = get_install_requirements("requirements.txt")
