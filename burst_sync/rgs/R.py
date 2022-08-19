@@ -8,7 +8,6 @@ from __future__ import division
 
 
 import numpy as np
-import scipy.stats as stats
 import pandas as pd
 
 
@@ -92,8 +91,7 @@ def table(x):
     data = np.asarray(x)
     if (len(data) == 0):
         return np.empty(0, dtype=np.int)
-    freq = stats.itemfreq(data)[:, 1]
-    freq = np.asarray(freq, dtype=np.int)
+    __, freq = np.unique(data, return_counts=True)
     return freq
 
 
