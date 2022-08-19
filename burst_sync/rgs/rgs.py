@@ -128,7 +128,7 @@ def norm(x, pc=.05, delta=0.1, **kwargs):
     tyc2 = np.append(tyc2, tyc2[-1])
     tyc3 = np.interp(R.seq(x), txs, tyc2)   # linear interpolation
 
-    return(np.log(x)-tyc3)
+    return (np.log(x)-tyc3)
 
 
 #######################
@@ -283,7 +283,7 @@ def nbp_RGS(ab, ap, adata, central, cthresh=stats.norm.ppf(.95), **kwargs):
     burst = pd.DataFrame()
     N = adata.shape[0]
     clusterno = np.unique(ab['clusid'])
-    if(len(clusterno) > 0):     # initial cluster candidates not empty
+    if (len(clusterno) > 0):     # initial cluster candidates not empty
         for jj in clusterno:    # jj
             p1 = 1
             p2 = 0
@@ -311,11 +311,11 @@ def nbp_RGS(ab, ap, adata, central, cthresh=stats.norm.ppf(.95), **kwargs):
             burst0 = adata.iloc[bid1].copy()
             burst0.loc[:, 'clusid'] = jj
             burst0.loc[:, 'P'] = pv1
-            burst = burst.append(burst0)
+            burst = pd.concat([burst, burst0])
 
     pause = pd.DataFrame()
     clusterno = np.unique(ap['clusid'])
-    if(len(clusterno) > 0):   # for non empty pause set
+    if (len(clusterno) > 0):   # for non empty pause set
         for jj in clusterno:
             p1 = 1
             p2 = 0
@@ -343,11 +343,11 @@ def nbp_RGS(ab, ap, adata, central, cthresh=stats.norm.ppf(.95), **kwargs):
             pause0 = adata.iloc[bid1].copy()
             pause0.loc[:, 'clusid'] = jj
             pause0.loc[:, 'P'] = pv2
-            pause = pause.append(pause0)
+            pause = pd.concat([pause, pause0])
 
     # eliminate overlapped burst-clusters with larger P values
     clusterno = np.unique(ab['clusid'])
-    if(len(clusterno) > 0):     # non empty initial cluster candidates
+    if (len(clusterno) > 0):     # non empty initial cluster candidates
         bp2 = burst
         for w in range(20):     # w: 20 could be changed to any number >10
             clid = np.unique(bp2['clusid'])
@@ -356,7 +356,7 @@ def nbp_RGS(ab, ap, adata, central, cthresh=stats.norm.ppf(.95), **kwargs):
                 d2 = bp2['id'][bp2['clusid'] == clid[ii+1]]
                 overlap = np.intersect1d(d1, d2)
                 if (len(overlap) >= 1):
-                    if(np.mean(bp2['P'][bp2['clusid'] == clid[ii]]) <=
+                    if (np.mean(bp2['P'][bp2['clusid'] == clid[ii]]) <=
                        np.mean(bp2['P'][bp2['clusid'] == clid[ii+1]])):
                         bp2 = bp2[bp2['clusid'] != clid[ii+1]]
                     else:
@@ -368,7 +368,7 @@ def nbp_RGS(ab, ap, adata, central, cthresh=stats.norm.ppf(.95), **kwargs):
 
     # eliminate overlapped pause-clusters with larger P values
     clusterno = np.unique(ap['clusid'])
-    if(len(clusterno) > 0):     # non empty pause set
+    if (len(clusterno) > 0):     # non empty pause set
         bp2 = pause
         for w in range(20):     # w
             clid = np.unique(bp2['clusid'])
@@ -377,7 +377,7 @@ def nbp_RGS(ab, ap, adata, central, cthresh=stats.norm.ppf(.95), **kwargs):
                 d2 = bp2['id'][bp2['clusid'] == clid[ii+1]]
                 overlap = np.intersect1d(d1, d2)
                 if (len(overlap) >= 1):
-                    if(np.mean(bp2['P'][bp2['clusid'] == clid[ii]]) <=
+                    if (np.mean(bp2['P'][bp2['clusid'] == clid[ii]]) <=
                        np.mean(bp2['P'][bp2['clusid'] == clid[ii+1]])):
                         bp2 = bp2[bp2['clusid'] != clid[ii+1]]
                     else:
