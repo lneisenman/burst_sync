@@ -114,9 +114,9 @@ spike train. The last parameter is the number of samples.
    ti = 0
    tf = 1300
    samples = 50
-   unit1 = np.arange(100, 1201, 100, dtype=np.float)
-   unit2 = np.arange(100, 1201, 110, dtype=np.float)
-   unit3 = np.arange(100, 1201, 120, dtype=np.float)
+   unit1 = np.arange(100, 1201, 100, dtype=float)
+   unit2 = np.arange(100, 1201, 110, dtype=float)
+   unit3 = np.arange(100, 1201, 120, dtype=float)
    tb, Sb = spike.bivariate_spike_distance(unit1, unit2, ti, tf, samples)
    bi_distance = np.average(Sb)
    
@@ -149,9 +149,9 @@ represent the bivariate sttc for the corresponding pair of spike trains.
    ti = 0
    tf = 1300
    dt = 1
-   unit1 = np.arange(100, 1201, 100, dtype=np.float)
-   unit2 = np.arange(100, 1201, 110, dtype=np.float)
-   unit3 = np.arange(100, 1201, 120, dtype=np.float)
+   unit1 = np.arange(100, 1201, 100, dtype=float)
+   unit2 = np.arange(100, 1201, 110, dtype=float)
+   unit3 = np.arange(100, 1201, 120, dtype=float)
    bi_sttc = sttc.sttc(unit1, unit2, dt, ti, tf)
    
    unit_list = [unit1, unit2, unit3]
@@ -181,9 +181,9 @@ of the spike train.
    
 
    tf = 1300
-   unit1 = np.arange(100, 1201, 100, dtype=np.float)
-   unit2 = np.arange(100, 1201, 110, dtype=np.float)
-   unit3 = np.arange(100, 1201, 120, dtype=np.float)
+   unit1 = np.arange(100, 1201, 100, dtype=float)
+   unit2 = np.arange(100, 1201, 110, dtype=float)
+   unit3 = np.arange(100, 1201, 120, dtype=float)
    unit_list = [unit1, unit2, unit3]
    sync = gs.calc_global_sync(unit_list, tf)
 

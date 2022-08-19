@@ -13,7 +13,7 @@ def quantile7(x, p):
     """
     n = len(x)
     index = (n - 1) * p
-    lo = np.asarray(index, dtype=np.int)
+    lo = np.asarray(index, dtype=int)
     hi = lo + 1
     x = np.sort(x)
     qs = x[lo]
@@ -31,7 +31,7 @@ def quantile8(x, p):
         raise ValueError('length of x must be at least two')
 
     nppm = 1/3 + (p * (n + 1 - 2/3)) - 1
-    j = np.asarray(nppm, dtype=np.int)
+    j = np.asarray(nppm, dtype=int)
     h = nppm - j
     x = np.sort(x)
     qs = x[j]
@@ -74,6 +74,6 @@ def table(x):
     """
     data = np.asarray(x)
     if (len(data) == 0):
-        return np.empty(0, dtype=np.int)
+        return np.empty(0, dtype=int)
     __, freq = np.unique(data, return_counts=True)
     return freq

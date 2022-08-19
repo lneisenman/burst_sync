@@ -8,7 +8,7 @@ import numpy as np
 cimport numpy as np
 
 
-DTYPE = np.float
+DTYPE = float
 ctypedef np.float_t DTYPE_t
 
 #def find_corner_spikes(float t, np.ndarray[DTYPE_t, ndim=1] train,

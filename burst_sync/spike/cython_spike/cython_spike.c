@@ -1240,7 +1240,7 @@ typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
 /* "burst_sync/spike/cython_spike/cython_spike.pyx":12
  * 
- * DTYPE = np.float
+ * DTYPE = float
  * ctypedef np.float_t DTYPE_t             # <<<<<<<<<<<<<<
  * 
  * #def find_corner_spikes(float t, np.ndarray[DTYPE_t, ndim=1] train,
@@ -1950,7 +1950,6 @@ static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_tile[] = "tile";
 static const char __pyx_k_xisi[] = "xisi";
 static const char __pyx_k_DTYPE[] = "DTYPE";
-static const char __pyx_k_float[] = "float";
 static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_shape[] = "shape";
 static const char __pyx_k_zeros[] = "zeros";
@@ -1996,7 +1995,6 @@ static PyObject *__pyx_n_s_dp1;
 static PyObject *__pyx_n_s_dp2;
 static PyObject *__pyx_n_s_enumerate;
 static PyObject *__pyx_n_s_fabs;
-static PyObject *__pyx_n_s_float;
 static PyObject *__pyx_n_s_i;
 static PyObject *__pyx_n_s_ibegin_t1;
 static PyObject *__pyx_n_s_ibegin_t2;
@@ -6105,7 +6103,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_dp2, __pyx_k_dp2, sizeof(__pyx_k_dp2), 0, 0, 1, 1},
   {&__pyx_n_s_enumerate, __pyx_k_enumerate, sizeof(__pyx_k_enumerate), 0, 0, 1, 1},
   {&__pyx_n_s_fabs, __pyx_k_fabs, sizeof(__pyx_k_fabs), 0, 0, 1, 1},
-  {&__pyx_n_s_float, __pyx_k_float, sizeof(__pyx_k_float), 0, 0, 1, 1},
   {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
   {&__pyx_n_s_ibegin_t1, __pyx_k_ibegin_t1, sizeof(__pyx_k_ibegin_t1), 0, 0, 1, 1},
   {&__pyx_n_s_ibegin_t2, __pyx_k_ibegin_t2, sizeof(__pyx_k_ibegin_t2), 0, 0, 1, 1},
@@ -6491,7 +6488,6 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_cython_spike(PyObject *__pyx_pyini
 #endif
 {
   PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -6612,17 +6608,11 @@ if (!__Pyx_RefNanny) {
   /* "burst_sync/spike/cython_spike/cython_spike.pyx":11
  * 
  * 
- * DTYPE = np.float             # <<<<<<<<<<<<<<
+ * DTYPE = float             # <<<<<<<<<<<<<<
  * ctypedef np.float_t DTYPE_t
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 11, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 11, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DTYPE, __pyx_t_2) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DTYPE, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
 
   /* "burst_sync/spike/cython_spike/cython_spike.pyx":35
  *                             double ti, double te, double *result)
@@ -6631,10 +6621,10 @@ if (!__Pyx_RefNanny) {
  *                              np.ndarray[DTYPE_t, ndim=1] t2,
  *                              double ti, double te, long N):
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10burst_sync_5spike_12cython_spike_1bivariate_spike_distance, NULL, __pyx_n_s_burst_sync_spike_cython_spike); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_bivariate_spike_distance, __pyx_t_2) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10burst_sync_5spike_12cython_spike_1bivariate_spike_distance, NULL, __pyx_n_s_burst_sync_spike_cython_spike); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_bivariate_spike_distance, __pyx_t_1) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "burst_sync/spike/cython_spike/cython_spike.pyx":109
  * 
@@ -6643,20 +6633,20 @@ if (!__Pyx_RefNanny) {
  *     ''' t is an array of spike time arrays
  *     ti the initial time of the recordings
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10burst_sync_5spike_12cython_spike_3multivariate_spike_distance, NULL, __pyx_n_s_burst_sync_spike_cython_spike); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 109, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_multivariate_spike_distance, __pyx_t_2) < 0) __PYX_ERR(0, 109, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10burst_sync_5spike_12cython_spike_3multivariate_spike_distance, NULL, __pyx_n_s_burst_sync_spike_cython_spike); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_multivariate_spike_distance, __pyx_t_1) < 0) __PYX_ERR(0, 109, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "burst_sync/spike/cython_spike/cython_spike.pyx":1
  * # -*- coding: utf-8 -*-             # <<<<<<<<<<<<<<
  * 
  * """
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_2) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../../Miniconda3/envs/burst/lib/site-packages/numpy/__init__.pxd":1013
  * 
@@ -6671,7 +6661,6 @@ if (!__Pyx_RefNanny) {
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
   if (__pyx_m) {
     if (__pyx_d) {
       __Pyx_AddTraceback("init burst_sync.spike.cython_spike", __pyx_clineno, __pyx_lineno, __pyx_filename);
