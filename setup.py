@@ -10,8 +10,9 @@ from setuptools import setup
 
 from distutils.extension import Extension
 from Cython.Build import cythonize
-
 import numpy
+
+from burst_sync._version import version
 
 requirements = ['cython', 'numpy']
 spike_source_files = ["burst_sync/spike/cython_spike/cython_spike.pyx",
@@ -33,7 +34,7 @@ sttc_other_files = ["burst_sync/sttc/cython_sttc/cython_sttc.pyx",
                     "burst_sync/sttc/cython_sttc/spike_time_tiling_coefficient.h"]
 
 setup(name='burst_sync',
-      version='2.0.0.Dev0',
+      version=version,
       license='BSD',
       packages=setuptools.find_packages(exclude=['tests', 'tests.*']),
       install_requires=requirements,
