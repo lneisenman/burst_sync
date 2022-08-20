@@ -493,24 +493,21 @@ def bp_summary(data, thresh0=stats.norm.ppf(0.05),
         tzd = pd.Series(np.cumsum(np.append(0, zd[:-1])))   # spike time
 
         # other summaries
-        bp_b.loc[:, 'start'] = tzd[bp_b['id']]
-        bp_b.loc[:, 'end'] = tzd[bp_b['id']] + bp_b['interval']
-        bp_p.loc[:, 'start'] = tzd[bp_p['id']]
-        bp_p.loc[:, 'end'] = tzd[bp_p['id']] + bp_p['interval']
-
-        if (bp_b.shape[0] > 0):
+        if bp_b.shape[0] > 0:
+            tzd_id = tzd[bp_b['id']].values
+            bp_b.loc[:, 'start'] = tzd_id
+            bp_b.loc[:, 'end'] = tzd_id + bp_b['interval']
             del bp_b['P']
             del bp_b['S']
-
-        if (bp_p.shape[0] > 0):
-            del bp_p['P']
-            del bp_p['S']
-
-        if (bp_b.shape[0] > 0):
             temp = bp_b['clusid']
             bp_b['clusid'] = np.repeat(R.seq(np.unique(temp)), R.table(temp))
 
-        if (bp_p.shape[0] > 0):
+        if bp_p.shape[0] > 0:
+            tzd_id = tzd[bp_p['id']].values
+            bp_p.loc[:, 'start'] = tzd_id   # ss
+            bp_p.loc[:, 'end'] = tzd_id + bp_p['interval'].values
+            del bp_p['P']
+            del bp_p['S']
             temp = bp_p['clusid']
             bp_p['clusid'] = np.repeat(R.seq(np.unique(temp)), R.table(temp))
 
