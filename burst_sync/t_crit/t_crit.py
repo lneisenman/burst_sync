@@ -39,9 +39,37 @@ def calc_B(data: list, end_time: float) -> float:
     isi_sq = isi**2
     t_bar = np.mean(isi)
     tsq_bar = np.mean(isi_sq)
+    B: float = ((np.sqrt(tsq_bar - t_bar**2)/t_bar) - 1)/np.sqrt(num_channels)
 
-    return ((np.sqrt(tsq_bar - t_bar**2)/t_bar) -1)/np.sqrt(num_channels)
+    return B
 
 
-def find_bursts():
-    pass
+def find_bursts(data: list, end_time: float,
+                t_crit: float = 0.15) -> pd.DataFrame:
+    ''' bursts are defined as two or more sequential interspike intervals
+        less than t_crit '''
+    columns = ['channel_idx', 'start_time', 'end_time', 'num_spikes']
+    bursts = pd.DataFrame(columns=columns)
+    isi_list = [np.diff(ch) if len(ch) > 2 else np.zeros(0) for ch in data]
+    for ch_idx, isi in enumerate(isi_list):
+        if len(isi) > 1:
+            idx = np.where(isi <= t_crit)[0]
+            i = 0
+            while (i < len(idx)-2):
+                j = i + 1
+                while ((idx[j] - idx[j-1] == 1) and (j < len(idx)-1)):
+                    j += 1
+
+                if j - i > 1:
+                    burst = {'channel_idx': ch_idx,
+                             'start_time': data[ch_idx][idx[i]],
+                             'end_time': data[ch_idx][idx[j-1]+1],
+                             'num_spikes': j - i + 1}
+                    temp = pd.DataFrame(data=burst, index=[0])
+                    bursts = pd.concat((bursts, temp), axis=0,
+                                       ignore_index=True)
+
+                i = j
+
+    bursts = bursts.sort_values(by=['start_time'])
+    return bursts
