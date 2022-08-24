@@ -34,7 +34,7 @@ homepage = "https://github.com/lneisenman/burst_sync"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-rsxXf --cov-report term-missing --cov=seeg"
+addopts = "-rsxXf --cov-report term-missing --cov=burst_sync"
 norecursedirs = [".cache", ".git", ".tox", "build", "*.egg-info"]
 testpaths = ["tests"]
 
