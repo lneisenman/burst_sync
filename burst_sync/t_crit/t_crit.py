@@ -55,7 +55,7 @@ def find_bursts(data: list, end_time: float,
         if len(isi) > 1:
             idx = np.where(isi <= t_crit)[0]
             i = 0
-            while (i < len(idx)-2):
+            while (i < len(idx)-1):
                 j = i + 1
                 while ((idx[j] - idx[j-1] == 1) and (j < len(idx)-1)):
                     j += 1
@@ -68,8 +68,30 @@ def find_bursts(data: list, end_time: float,
                     temp = pd.DataFrame(data=burst, index=[0])
                     bursts = pd.concat((bursts, temp), axis=0,
                                        ignore_index=True)
+                elif (idx[j] - idx[j-1] == 1) and (j == len(idx) - 1):
+                    burst = {'channel_idx': ch_idx,
+                             'start_time': data[ch_idx][idx[i]],
+                             'end_time': data[ch_idx][idx[j-1]+1],
+                             'num_spikes': 3}
+                    temp = pd.DataFrame(data=burst, index=[0])
+                    bursts = pd.concat((bursts, temp), axis=0,
+                                       ignore_index=True)
 
                 i = j
 
     bursts = bursts.sort_values(by=['start_time'])
     return bursts
+
+
+def find_IBI(bursts: pd.DataFrame, num_channels: int) -> npt.ArrayLike:
+    ibis = np.zeros(0)
+    grouped = bursts.groupby(['channel_idx'])
+    for channel in range(num_channels):
+        name = 'channel_' + str(channel+1)
+        ibi = np.zeros(0)
+        if channel in bursts['channel_idx'].values:
+            df = grouped.get_group(channel)
+            ibi = df['start_time'][1:].values - df['end_time'][:-1].values
+            ibis = np.append(ibis, ibi)
+
+    return ibis

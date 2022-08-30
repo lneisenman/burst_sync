@@ -18,4 +18,19 @@ def baseline():
         data = pd.concat([data, df], axis=1, ignore_index=True)
 
     names = data.columns.values.tolist()
-    return [data[col].dropna().values for col in names]
+    return names, [data[col].dropna().values for col in names]
+
+
+@pytest.fixture
+def baseline_names(baseline):
+    return baseline[0]
+
+
+@pytest.fixture
+def baseline_data(baseline):
+    return baseline[1]
+
+
+@pytest.fixture
+def bursts(baseline_data):
+    return burst_sync.t_crit.find_bursts(baseline_data, 1800)
