@@ -80,6 +80,7 @@ def find_bursts(data: list, end_time: float,
                 i = j
 
     bursts = bursts.sort_values(by=['start_time'])
+    bursts.reset_index(drop=True, inplace=True)
     return bursts
 
 
@@ -95,3 +96,41 @@ def find_IBI(bursts: pd.DataFrame, num_channels: int) -> npt.ArrayLike:
             ibis = np.append(ibis, ibi)
 
     return ibis
+
+
+def find_NB(bursts: pd.DataFrame) -> pd.DataFrame:
+    columns = ['start_time', 'end_time', 'num_channels',
+               'num_spikes', 'channels']
+    nb = pd.DataFrame(columns=columns)
+    nb['channels'] = nb['channels'].astype(object)
+    i = 0
+    num_nb = 0
+    while i < len(bursts) - 1:
+        if bursts['start_time'][i+1] < bursts['end_time'][i]:
+            nb.at[num_nb, 'start_time'] = bursts['start_time'][i]
+            end = bursts['end_time'][i+1] if bursts['end_time'][i+1] > \
+                bursts['end_time'][i] else bursts['end_time'][i]
+            num_channels = 2
+            num_spikes = (bursts['num_spikes'][i] +
+                          bursts['num_spikes'][i+1])
+            channels = [bursts['channel_idx'][i],
+                        bursts['channel_idx'][i+1]]
+            i += 1
+            while ((i < len(bursts) - 1) and
+                   (bursts['start_time'][i+1] <= end)):
+                i += 1
+                if bursts['end_time'][i] > end:
+                    end = bursts['end_time'][i]
+                num_channels += 1
+                num_spikes += bursts['num_spikes'][i]
+                channels.append(bursts['channel_idx'][i])
+
+            nb.at[num_nb, 'end_time'] = end
+            nb.at[num_nb, 'num_channels'] = num_channels
+            nb.at[num_nb, 'num_spikes'] = num_spikes
+            nb.at[num_nb, 'channels'] = channels
+            num_nb += 1
+        else:
+            i += 1
+
+    return nb

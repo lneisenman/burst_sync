@@ -3,8 +3,8 @@
 import numpy as np
 import numpy.testing as npt
 
-from burst_sync.t_crit import calc_ASDR, calc_B, find_bursts
-from burst_sync.t_crit.t_crit import find_IBI
+from burst_sync.t_crit import (calc_ASDR, calc_B, find_bursts, find_IBI,
+                               find_NB)
 
 
 def test_calc_ASDR(baseline_data):
@@ -44,3 +44,16 @@ def test_find_IBI(bursts):
                         387.4208, 279.6726, 513.6184, 251.9698,
                         164.938, 6.95])
     assert len(ibis) == 3323
+
+
+def test_find_NB(bursts):
+    nb = find_NB(bursts)
+    npt.assert_allclose(nb['start_time'][:5].values.astype(float),
+                        [1.5038, 2.4928, 6.9004, 8.8958, 10.2652])
+    npt.assert_allclose(nb['end_time'][:5].values.astype(float),
+                        [1.729, 3.0752, 7.1522, 9.1818, 11.2562])
+
+    npt.assert_allclose(nb['start_time'][-5:].values.astype(float),
+                        [1777.9236, 1788.6382, 1790.9318, 1795.1072, 1795.792])
+    npt.assert_allclose(nb['end_time'][-5:].values.astype(float),
+                        [1778.1976, 1789.392, 1791.3643, 1795.24, 1796.0815])
