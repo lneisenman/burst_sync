@@ -34,3 +34,8 @@ def baseline_data(baseline):
 @pytest.fixture
 def bursts(baseline_data):
     return burst_sync.t_crit.find_bursts(baseline_data, 1800)
+
+
+@pytest.fixture
+def nb(bursts):
+    return burst_sync.t_crit.find_NB(bursts)

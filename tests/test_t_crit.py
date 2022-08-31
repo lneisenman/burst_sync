@@ -4,7 +4,7 @@ import numpy as np
 import numpy.testing as npt
 
 from burst_sync.t_crit import (calc_ASDR, calc_B, find_bursts, calc_IBI,
-                               find_NB)
+                               find_NB, calc_INBI)
 
 
 def test_calc_ASDR(baseline_data):
@@ -57,3 +57,12 @@ def test_find_NB(bursts):
                         [1777.9236, 1788.6382, 1790.9318, 1795.1072, 1795.792])
     npt.assert_allclose(nb['end_time'][-5:].values.astype(float),
                         [1778.1976, 1789.392, 1791.3643, 1795.24, 1796.0815])
+
+
+def test_calc_INBI(nb):
+    inbi = calc_INBI(nb)
+    npt.assert_allclose(inbi[:10], [1.5714, 4.6594, 2.2814, 2.3604, 1.5836,
+                                    3.0212, 3.0158, 2.0138, 1.1938, 3.0352])
+    npt.assert_allclose(inbi[-10:], [1.6338, 5.0902, 3.0026, 1.2164,
+                                     0.8892, 4.6912, 11.4684, 2.726,
+                                     4.3082, 0.9744])

@@ -134,3 +134,9 @@ def find_NB(bursts: pd.DataFrame) -> pd.DataFrame:
             i += 1
 
     return nb
+
+
+def calc_INBI(nb: pd.DataFrame) -> npt.ArrayLike:
+    inbi: npt.NDArray = nb['end_time'][1:].values - \
+                        nb['start_time'][:-1].values
+    return inbi.astype(float)
