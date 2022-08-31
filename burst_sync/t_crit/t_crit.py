@@ -84,7 +84,7 @@ def find_bursts(data: list, end_time: float,
     return bursts
 
 
-def find_IBI(bursts: pd.DataFrame, num_channels: int) -> npt.ArrayLike:
+def calc_IBI(bursts: pd.DataFrame, num_channels: int) -> npt.ArrayLike:
     ibis = np.zeros(0)
     grouped = bursts.groupby(['channel_idx'])
     for channel in range(num_channels):

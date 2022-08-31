@@ -3,7 +3,7 @@
 import numpy as np
 import numpy.testing as npt
 
-from burst_sync.t_crit import (calc_ASDR, calc_B, find_bursts, find_IBI,
+from burst_sync.t_crit import (calc_ASDR, calc_B, find_bursts, calc_IBI,
                                find_NB)
 
 
@@ -38,8 +38,8 @@ def test_find_bursts(baseline_data):
             assert counts[i] == num_bursts[i]
 
 
-def test_find_IBI(bursts):
-    ibis = find_IBI(bursts, 60)
+def test_calc_IBI(bursts):
+    ibis = calc_IBI(bursts, 60)
     npt.assert_allclose(ibis[20:30], [41.4588, 2.5342, 216.4758, 135.8884,
                         387.4208, 279.6726, 513.6184, 251.9698,
                         164.938, 6.95])
