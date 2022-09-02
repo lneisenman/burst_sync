@@ -51,7 +51,6 @@ plugins = "numpy.typing.mypy_plugin"
 [[tool.mypy.overrides]]
 module = [
     "tests.*.*",
-    "burst_sync.global_sync.*",
     "burst_sync.rgs.*",
     "burst_sync.spike.*",
     "burst_sync.sttc.*",

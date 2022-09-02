@@ -7,24 +7,19 @@ from __future__ import print_function, division
 
 
 import numpy as np
-import numpy.testing as nptest
+import numpy.testing as npt
 import pandas as pd
 
 from burst_sync import global_sync as gs
 
 
-def test_get_phase_spikes():
-    spikes = np.round(pd.read_csv('tests/test_data.csv').values[:, 1])
-    spikes[0] = 2
-    phase = gs.get_phase_spikes(spikes, 4000)
-
-    # kreuz_phase.csv from running Matlab code
-    result = pd.read_csv('tests/kreuz_phase.csv', header=None)[0].values
-    nptest.assert_allclose(phase[:-1], result[:-1])     # last value is random
+def test_get_phase_spikes(Kreuz_spikes_1, Kreuz_phase):
+    phase = gs.get_phase_spikes(Kreuz_spikes_1, 4000)
+    npt.assert_allclose(phase[:-1], Kreuz_phase[:-1])   # last value is random
 
 
-def test_calc_global_sync():
-    spikes = np.round(pd.read_csv('tests/test_data.csv').values[:, 1:])
+def test_calc_global_sync(Kreuz_spikes):
+    spikes = Kreuz_spikes
     (M, N) = spikes.shape
 
     # Matlab code assumed unique integer spike times
@@ -37,4 +32,4 @@ def test_calc_global_sync():
     spike_list = [list(spikes[:, i]) for i in range(N)]
     sync = gs.calc_global_sync(spike_list, 4000)
     SI = (20.632722 - 1)/(N - 1)    # 20.63 from running Matlab code
-    nptest.assert_allclose(sync, SI, atol=.001)
+    npt.assert_allclose(sync, SI, atol=.001)

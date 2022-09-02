@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -39,3 +40,21 @@ def bursts(baseline_data):
 @pytest.fixture
 def nb(bursts):
     return burst_sync.t_crit.find_NB(bursts)
+
+
+@pytest.fixture
+def Kreuz_spikes():
+    return np.round(pd.read_csv('tests/data/test_data.csv').values[:, 1:])
+
+
+@pytest.fixture
+def Kreuz_spikes_1(Kreuz_spikes):
+    temp = Kreuz_spikes[:, 0]
+    temp[0] = 2
+    return temp
+
+
+@pytest.fixture
+def Kreuz_phase():
+    ''' from running Matlab code '''
+    return pd.read_csv('tests/data/kreuz_phase.csv', header=None)[0].values

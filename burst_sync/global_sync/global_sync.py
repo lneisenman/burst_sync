@@ -3,21 +3,20 @@
 python translation of Meaney lab Matlab code
 """
 
-from __future__ import (print_function, division,
-                        absolute_import, unicode_literals)
-
+import typing
 
 import numpy as np
+import numpy.typing as npt
 
 
-def get_phase_spikes(spikes, tfinal):
+def get_phase_spikes(spikes: typing.Sequence, tfinal: float) -> npt.NDArray:
     """
     calculate spike phase as defined in Patel 2012
     """
-    phase = 2 * np.pi * np.random.rand(tfinal)  # np.zeros(tfinal)
+    phase: npt.NDArray = 2 * np.pi * np.random.rand(tfinal)   # type: ignore
     k = 0
     numspikes = len(spikes)
-    for t in range(1, tfinal+1):
+    for t in range(1, tfinal+1):    # type: ignore
         while (k < numspikes) and (t >= spikes[k]):
             k += 1
 
@@ -33,7 +32,8 @@ def get_phase_spikes(spikes, tfinal):
     return phase
 
 
-def calc_phase_sync_matrix(spike_list, tfinal):
+def calc_phase_sync_matrix(spike_list: list,
+                           tfinal: float) -> tuple[npt.NDArray, list]:
     """
     calculate the correlation matrix using spike phase
     """
@@ -55,12 +55,12 @@ def calc_phase_sync_matrix(spike_list, tfinal):
     return C, phase_list
 
 
-def calc_global_sync(spike_list, tfinal):
-    C, phase_list = calc_phase_sync_matrix(spike_list, tfinal)
+def calc_global_sync(spike_list: list, tfinal: float) -> float:
+    C, __ = calc_phase_sync_matrix(spike_list, tfinal)
     (D, V) = np.linalg.eig(C)
     order = np.argsort(D)
 
     eigenvals = D[order].copy()
     M = len(spike_list)
-    index = (np.max(eigenvals) - 1)/(M - 1)
+    index: float = (np.max(eigenvals) - 1)/(M - 1)
     return index
