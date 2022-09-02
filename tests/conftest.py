@@ -58,3 +58,33 @@ def Kreuz_spikes_1(Kreuz_spikes):
 def Kreuz_phase():
     ''' from running Matlab code '''
     return pd.read_csv('tests/data/kreuz_phase.csv', header=None)[0].values
+
+
+@pytest.fixture
+def rgs_data():
+    data1 = pd.read_csv('tests/data/rgs/testdata1.csv')
+    data2 = pd.read_csv('tests/data/rgs/testdata2.csv')
+    data3 = pd.read_csv('tests/data/rgs/testdata3.csv')
+    return [data1, data2, data3]
+
+
+@pytest.fixture
+def rgs_bursts():
+    bursts1 = pd.read_csv('tests/data/rgs/output_b1.csv')
+    bursts2 = pd.read_csv('tests/data/rgs/output_b2.csv')
+    bursts3 = pd.read_csv('tests/data/rgs/output_b3.csv')
+    bursts3['id'] = bursts3['id'].astype(np.int32)
+    bursts3['clusid'] = bursts3['clusid'].astype(np.int32)
+    return [bursts1, bursts2, bursts3]
+
+
+@pytest.fixture
+def rgs_pauses():
+    pauses1 = pd.read_csv('tests/data/rgs/output_p1.csv')
+    pauses2 = pd.read_csv('tests/data/rgs/output_p2.csv')
+    pauses2['id'] = pauses2['id'].astype(np.int32)
+    pauses2['clusid'] = pauses2['clusid'].astype(np.int32)
+    pauses3 = pd.read_csv('tests/data/rgs/output_p3.csv')
+    pauses3['id'] = pauses3['id'].astype(np.int32)
+    pauses3['clusid'] = pauses3['clusid'].astype(np.int32)
+    return [pauses1, pauses2, pauses3]

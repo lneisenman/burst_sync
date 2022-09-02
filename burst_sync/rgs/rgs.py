@@ -3,25 +3,27 @@
 Translation of Robust Gaussian Surprise from R to Python
 """
 
-from __future__ import (print_function, division,
-                        unicode_literals, absolute_import)
+from typing import Sequence
 
 import numpy as np
+import numpy.typing as npt
 import scipy.stats as stats
 import pandas as pd
 
 from . import R
+from .R import Value, Val_Array
 
 
-def Extcenter(x, pc):
+def Extcenter(x: Val_Array, pc: float) -> npt.NDArray:
     """
     #center of top pc and bottom pc of log transformed data
     """
     probs = np.asarray([pc, 1-pc])
-    return np.mean(R.quantile8(np.log(x), probs))
+    return np.mean(R.quantile8(np.log(x), probs))   # type: ignore
 
 
-def runEcen(x, k=41, p=.2, pc=.05, **kwargs):
+def runEcen(x: Val_Array, k: float = 41, p: float = 0.2,
+            pc: float = .05, **kwargs: Value) -> npt.NDArray:
     """
     #x: ISIs of spike train
     #Moving extreme center of pc-quantile with window size max(k,length(x)*p)
@@ -64,7 +66,7 @@ def runEcen(x, k=41, p=.2, pc=.05, **kwargs):
     return res  # moving e-center of log(isi)
 
 
-def runmed(x, k=41, p=.2):
+def runmed(x: Val_Array, k: int = 41, p: float = .2) -> npt.NDArray:
     """
     #x: ISIs
     #Moving median with window size max(k,length(x)*p)
@@ -76,7 +78,8 @@ def runmed(x, k=41, p=.2):
     return R.runmed(x, k=max(k, int(len(x)*p/2)*2+1))
 
 
-def norm(x, pc=.05, delta=0.1, **kwargs):
+def norm(x: Val_Array, pc: float = 0.05, delta: float = 0.1,
+         **kwargs: Value) -> npt.NDArray:
     """
 
     #this function generates the normalized log(isi) using
@@ -134,8 +137,9 @@ def norm(x, pc=.05, delta=0.1, **kwargs):
 #######################
 # initial seeds of bursts
 ########################
-def nb_seed(x, pc=0.05, central=None, thresh=stats.norm.ppf(0.005),
-            **kwargs):
+def nb_seed(x: Val_Array, central: pd.DataFrame, pc: float = 0.05,
+            thresh: float = stats.norm.ppf(0.005),
+            **kwargs: Value) -> list[pd.DataFrame]:
     """
     #generates the burst seed intervals whose length <=thresh
     #x: ISIs
@@ -173,8 +177,9 @@ def nb_seed(x, pc=0.05, central=None, thresh=stats.norm.ppf(0.005),
 #####################
 # pause seed intervals
 #####################
-def np_seed(x, pc=0.05, central=None, thresh=stats.norm.ppf(0.995),
-            **kwargs):
+def np_seed(x: Val_Array, central: pd.DataFrame, pc: float = 0.05,
+            thresh: float = stats.norm.ppf(0.995),
+            **kwargs: Value) -> list[pd.DataFrame]:
     """
     #detect the pause seeds whose normalized ISI>=thresh*mad(norm.length)
     #x: ISIs
@@ -210,7 +215,7 @@ def np_seed(x, pc=0.05, central=None, thresh=stats.norm.ppf(0.995),
 ##############
 # P-values for the bursts
 ##############
-def np_burst(bcluster, mu=0, sigma=1):
+def np_burst(bcluster: pd.DataFrame, mu: float = 0, sigma: float = 1) -> float:
     """
     #calculates the p-value of the burst cluster bcluster
     #input: bcluster: id, length, norm.length #burst candidate
@@ -226,14 +231,14 @@ def np_burst(bcluster, mu=0, sigma=1):
     time_2 = np.sum(bcluster['norm_length'])    # sum of normalized ISI
     q = bid1.shape[0]
     burst_p1 = stats.norm.logcdf(time_2, loc=q*mu, scale=sigma*np.sqrt(q))
-    return burst_p1
+    return burst_p1     # type: ignore
 
 
 ##############
 # P-values for the pauses
 ##############
 
-def np_pause(pcluster, mu=0, sigma=1):
+def np_pause(pcluster: pd.DataFrame, mu: float = 0, sigma: float = 1) -> float:
     """
     #calculates the p-value of the pause cluster pcluster
     #input: pcluster: id, length, norm.length
@@ -251,14 +256,16 @@ def np_pause(pcluster, mu=0, sigma=1):
     time_2 = np.sum(pcluster['norm_length'])    # sum of normalized ISI
     q = bid1.shape[0]
     pause_p1 = stats.norm.logsf(time_2, loc=q*mu, scale=sigma*np.sqrt(q))
-    return pause_p1
+    return pause_p1     # type: ignore
 
 
 ##############
 # Burst and Pause detection by Robust Gassian Surprise
 ##############
 #
-def nbp_RGS(ab, ap, adata, central, cthresh=stats.norm.ppf(.95), **kwargs):
+def nbp_RGS(ab: pd.DataFrame, ap: pd.DataFrame, adata: pd.DataFrame,
+            central: pd.DataFrame, cthresh: float = stats.norm.ppf(.95),
+            **kwargs: Value) -> list[pd.DataFrame]:
     """
     from the initial burst or pause list (ab or ap) this function extends
     bursts or pauses by adding ISIs that decreases P-value of burst or pause
@@ -285,8 +292,8 @@ def nbp_RGS(ab, ap, adata, central, cthresh=stats.norm.ppf(.95), **kwargs):
     clusterno = np.unique(ab['clusid'])
     if (len(clusterno) > 0):     # initial cluster candidates not empty
         for jj in clusterno:    # jj
-            p1 = 1
-            p2 = 0
+            p1 = 1.
+            p2 = 0.
             bid1 = np.asarray(ab['id'][ab['clusid'] == jj])
             # extend to left
             while (p2 < p1) and (bid1[0] > 1):
@@ -397,7 +404,7 @@ def nbp_RGS(ab, ap, adata, central, cthresh=stats.norm.ppf(.95), **kwargs):
         pause['clusid'] = np.repeat(R.seq(np.unique(pause['clusid'])),
                                     R.table(pause['clusid']))
 
-    return [burst, pause]
+    return [burst.reset_index(drop=True), pause.reset_index(drop=True)]
 
 
 ###################################
@@ -406,9 +413,10 @@ def nbp_RGS(ab, ap, adata, central, cthresh=stats.norm.ppf(.95), **kwargs):
 # Output is list of bursts and pauses of each spike trains
 ####################################
 #
-def bp_summary(data, thresh0=stats.norm.ppf(0.05),
-               thresh1=stats.norm.ppf(0.95), k0=41, p0=0.2, pc0=0.05,
-               p_thresh=0.01, min_spikes=2):
+def bp_summary(data: list[pd.DataFrame], thresh0: float = stats.norm.ppf(0.05),
+               thresh1: float = stats.norm.ppf(0.95), k0: int = 41,
+               p0: float = 0.2, pc0: float = 0.05, p_thresh: float = 0.01,
+               min_spikes: int = 2) -> list[list[pd.DataFrame]]:
     """
     This function summarizes the bursts and pauses for a group of spike trains
     generated by RGS method
@@ -431,11 +439,11 @@ def bp_summary(data, thresh0=stats.norm.ppf(0.05),
     for train in data:
         zd = np.asarray(train['isi'])
         # initial bursts and pauses calculation
-        tbmed1_3 = nb_seed(zd, thresh=thresh0, central=b_Cont, pc=pc0, k=k0,
+        tbmed1_3 = nb_seed(zd, central=b_Cont, thresh=thresh0, pc=pc0, k=k0,
                            p=p0)
         ab2 = tbmed1_3[0]       # burst seeds for zd
         adata = tbmed1_3[1]     # all data
-        tpcen1_3 = np_seed(zd, thresh=thresh1, central=b_Cont, pc=pc0, k=k0,
+        tpcen1_3 = np_seed(zd, central=b_Cont, thresh=thresh1, pc=pc0, k=k0,
                            p=p0)
         ap2 = tpcen1_3[0]   # pause seeds
         # RGS bursts and pauses detection
@@ -511,8 +519,10 @@ def bp_summary(data, thresh0=stats.norm.ppf(0.05),
             temp = bp_p['clusid']
             bp_p['clusid'] = np.repeat(R.seq(np.unique(temp)), R.table(temp))
 
-        burst.append(bp_b)  # bursts for spike train data[[kk]]
-        pause.append(bp_p)  # pauses for spike train data[[kk]]
+        # bursts for spike train data[[kk]]
+        burst.append(bp_b.reset_index(drop=True))
+        # pauses for spike train data[[kk]]
+        pause.append(bp_p.reset_index(drop=True))
 
     # output for data, a set of spike trains
     return [burst, pause]

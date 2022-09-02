@@ -14,7 +14,7 @@ def test_multivariate_sttc():
     """ Use Kreuz 2012 test data to test multivariate_sttc which uses
     bivariate_sttc"""
 
-    test_data = pd.read_csv('tests/test_data.csv')
+    test_data = pd.read_csv('tests/data/test_data.csv')
     result = pd.read_csv('tests/sttc_result.csv')
     print(result.head())
     test_data_list = [np.asarray(test_data[str(i)]) for i in range(50)]
