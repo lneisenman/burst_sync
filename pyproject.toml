@@ -51,7 +51,7 @@ plugins = "numpy.typing.mypy_plugin"
 [[tool.mypy.overrides]]
 module = [
     "tests.*.*",
-    "burst_sync.spike.*",
-    "burst_sync.sttc.*",
+    "burst_sync.spike.original_spike.py",
+    # "burst_sync.sttc.*",
 ]
 disallow_untyped_defs = false
