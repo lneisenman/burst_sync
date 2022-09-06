@@ -15,7 +15,7 @@ def test_multivariate_sttc():
     bivariate_sttc"""
 
     test_data = pd.read_csv('tests/data/test_data.csv')
-    result = pd.read_csv('tests/sttc_result.csv')
+    result = pd.read_csv('tests/data/sttc_result.csv')
     print(result.head())
     test_data_list = [np.asarray(test_data[str(i)]) for i in range(50)]
     mv_sttc = sttc.multivariate_sttc(test_data_list, 0.05, 0, 4000)
