@@ -5,6 +5,7 @@ import pandas as pd
 import pytest
 
 import burst_sync
+from burst_sync.t_crit.t_crit import calc_ISI_hist
 
 
 @pytest.fixture
@@ -35,6 +36,26 @@ def baseline_data(baseline):
 @pytest.fixture
 def bursts(baseline_data):
     return burst_sync.t_crit.find_bursts(baseline_data, 1800)
+
+
+@pytest.fixture
+def isi(baseline_data):
+    return burst_sync.t_crit.calc_ISI(baseline_data)
+
+
+@pytest.fixture
+def isi_histogram(isi):
+    return calc_ISI_hist(isi)
+
+
+@pytest.fixture
+def isi_hist(isi_histogram):
+    return isi_histogram[0]
+
+
+@pytest.fixture
+def isi_edges(isi_histogram):
+    return isi_histogram[1]
 
 
 @pytest.fixture

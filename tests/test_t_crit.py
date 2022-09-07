@@ -3,8 +3,8 @@
 import numpy as np
 import numpy.testing as npt
 
-from burst_sync.t_crit import (calc_ASDR, calc_B, find_bursts, calc_IBI,
-                               find_NB, calc_INBI)
+from burst_sync.t_crit import (calc_ASDR, calc_B, fit_ISI_hist, calc_t_crit,
+                               find_bursts, calc_IBI, find_NB, calc_INBI)
 
 
 def test_calc_ASDR(baseline_data):
@@ -16,6 +16,17 @@ def test_calc_ASDR(baseline_data):
 def test_calc_B(baseline_data):
     B = calc_B(baseline_data, 1800)
     assert abs(B - 0.050442) < 1e-6
+
+
+def test_fit_ISI_hist(isi_hist, isi_edges):
+    params, cov = fit_ISI_hist(isi_hist, isi_edges)
+    assert abs(params[3] - 0.212222) < 1e-6
+    assert abs(params[4] - 1.39562) < 1e-5
+
+
+def test_calc_t_crit():
+    t_crit = calc_t_crit(0.1, 1)
+    assert abs(t_crit - 0.180229) <= 1e-6
 
 
 def test_find_bursts(baseline_data):

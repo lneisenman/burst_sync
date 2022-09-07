@@ -3,6 +3,7 @@
 import numpy as np
 import numpy.typing as npt
 import pandas as pd
+from scipy import optimize as opt
 
 
 def calc_ASDR(data: list, end_time: int) -> npt.NDArray:
@@ -42,6 +43,53 @@ def calc_B(data: list, end_time: float) -> float:
     B: float = ((np.sqrt(tsq_bar - t_bar**2)/t_bar) - 1)/np.sqrt(num_channels)
 
     return B
+
+
+def calc_ISI(data: list) -> npt.NDArray:
+    isi = np.zeros(0)
+    for channel in data:
+        if len(channel) > 1:
+            isi = np.append(isi, np.diff(channel))
+
+    return isi
+
+
+def calc_ISI_hist(isi: npt.NDArray, bins: int = 500,
+                  _range: int = 10) -> tuple[npt.NDArray, npt.NDArray]:
+    hist, edges = np.histogram(isi, bins=bins, range=(0, _range))
+    total = np.sum(hist)
+    hist = hist/total
+    midpts = edges[:-1] + (edges[1] - edges[0])/2
+    return hist, midpts
+
+
+def double_exp(x: float, a0: float, a1: float, a2: float,
+               tau1: float, tau2: float) -> float:
+    return a0 + a1*np.exp(-x/tau1) + a2*np.exp(-x/tau2)   # type: ignore
+
+
+def fit_ISI_hist(hist: npt.NDArray, edges: npt.NDArray,
+                 sp: int = 1) -> tuple[npt.NDArray, npt.NDArray]:
+    p0 = [0.01, 0.01, 0.01, 0.1, 1]
+    weights = np.sqrt(hist)
+    zeros = np.where(weights == 0)[0]
+    weights[zeros] = 1
+    params, cov = opt.curve_fit(double_exp, xdata=edges[sp:], ydata=hist[sp:],
+                                p0=p0, sigma=weights[sp:])
+    return params, cov
+
+
+def calc_t_crit(tau1: float, tau2: float) -> float:
+    def _t_crit_fcn(t: float, tau: list) -> float:
+        return float(1 - np.exp(-t/tau[0]) - np.exp(-t/tau[1]))
+
+    result = opt.root_scalar(_t_crit_fcn, method='brentq',
+                             bracket=[tau1, tau2],
+                             args=[tau1, tau2])
+    if result.converged:
+        return result.root    # type: ignore
+    else:
+        raise ValueError('failed to converge')
 
 
 def find_bursts(data: list, end_time: float,
