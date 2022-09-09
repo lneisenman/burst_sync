@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 
 import burst_sync
-from burst_sync.t_crit.t_crit import calc_ISI_hist
+from burst_sync.t_crit import calc_ASDR, calc_ISI_hist
 
 
 @pytest.fixture
@@ -31,6 +31,11 @@ def baseline_names(baseline):
 @pytest.fixture
 def baseline_data(baseline):
     return baseline[1]
+
+
+@pytest.fixture
+def ASDR(baseline_data):
+    return calc_ASDR(baseline_data, 1800)
 
 
 @pytest.fixture
