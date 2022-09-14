@@ -9,7 +9,7 @@ from burst_sync.plots import (raster_plot, ASDR_plot, ISI_histogram,
                               t_crit_summary)
 
 
-# pytest.skip('Skipping graphs', allow_module_level=True)
+pytest.skip('Skipping graphs', allow_module_level=True)
 
 
 def test_raster_plot(baseline_data):
