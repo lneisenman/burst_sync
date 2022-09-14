@@ -13,7 +13,7 @@ def isi_n(data: pd.DataFrame, N: int = 10,
     isi = times[(N-1):] - times[:-(N-1)]
     indices = np.where(isi < 0.2)[0]
     num_idx = len(indices)
-    if num_idx is 0:
+    if num_idx == 0:
         raise ValueError('No bursts detected')
 
     columns = ['start_time', 'end_time', 'num_spikes', 'channels',
