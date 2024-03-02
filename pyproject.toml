@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools>=48", "wheel >= 0.29.0", "cython"]
+requires = ["setuptools>=48", "wheel >= 0.29.0", "cython", "numpy"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "burst_sync"
 description = "analyse bursting in mea data"
-version = "2.0.0.dev0"
+version = "2.0.1.dev0"
 authors = [
     {name = "Larry Eisenman", email = "leisenman@wustl.edu"}
 ]
@@ -13,7 +13,7 @@ license = {file = "LICENSE.txt"}
 readme = "README.rst"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: BSD3 License",
+    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Development Status :: 2 - Pre-Alpha"
 ]
